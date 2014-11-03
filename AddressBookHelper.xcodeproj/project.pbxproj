@@ -14,6 +14,8 @@
 		AC2CE5F11A07965E007FA523 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC2CE5F01A07965E007FA523 /* Images.xcassets */; };
 		AC2CE5F41A07965E007FA523 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC2CE5F21A07965E007FA523 /* LaunchScreen.xib */; };
 		AC2CE6001A07965F007FA523 /* AddressBookHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2CE5FF1A07965F007FA523 /* AddressBookHelperTests.m */; };
+		AC2CE60C1A0796BD007FA523 /* ABReaderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2CE60B1A0796BD007FA523 /* ABReaderHelper.m */; };
+		AC2CE60F1A07975D007FA523 /* ABPeopleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2CE60E1A07975D007FA523 /* ABPeopleModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,10 @@
 		AC2CE5F91A07965F007FA523 /* AddressBookHelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AddressBookHelperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC2CE5FE1A07965F007FA523 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC2CE5FF1A07965F007FA523 /* AddressBookHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressBookHelperTests.m; sourceTree = "<group>"; };
+		AC2CE60A1A0796BD007FA523 /* ABReaderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABReaderHelper.h; sourceTree = "<group>"; };
+		AC2CE60B1A0796BD007FA523 /* ABReaderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABReaderHelper.m; sourceTree = "<group>"; };
+		AC2CE60D1A07975D007FA523 /* ABPeopleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABPeopleModel.h; sourceTree = "<group>"; };
+		AC2CE60E1A07975D007FA523 /* ABPeopleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABPeopleModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +87,7 @@
 		AC2CE5E21A07965E007FA523 /* AddressBookHelper */ = {
 			isa = PBXGroup;
 			children = (
+				AC2CE6091A0796A4007FA523 /* ABHelper */,
 				AC2CE5E71A07965E007FA523 /* AppDelegate.h */,
 				AC2CE5E81A07965E007FA523 /* AppDelegate.m */,
 				AC2CE5EA1A07965E007FA523 /* ViewController.h */,
@@ -117,6 +124,17 @@
 				AC2CE5FE1A07965F007FA523 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC2CE6091A0796A4007FA523 /* ABHelper */ = {
+			isa = PBXGroup;
+			children = (
+				AC2CE60A1A0796BD007FA523 /* ABReaderHelper.h */,
+				AC2CE60B1A0796BD007FA523 /* ABReaderHelper.m */,
+				AC2CE60D1A07975D007FA523 /* ABPeopleModel.h */,
+				AC2CE60E1A07975D007FA523 /* ABPeopleModel.m */,
+			);
+			path = ABHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +237,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC2CE60F1A07975D007FA523 /* ABPeopleModel.m in Sources */,
+				AC2CE60C1A0796BD007FA523 /* ABReaderHelper.m in Sources */,
 				AC2CE5EC1A07965E007FA523 /* ViewController.m in Sources */,
 				AC2CE5E91A07965E007FA523 /* AppDelegate.m in Sources */,
 				AC2CE5E61A07965E007FA523 /* main.m in Sources */,
