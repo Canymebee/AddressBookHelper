@@ -11,6 +11,7 @@
 @interface ViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextView *displayTextView;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 
 @end
 

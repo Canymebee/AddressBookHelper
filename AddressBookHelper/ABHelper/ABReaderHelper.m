@@ -61,67 +61,97 @@ void ABExternalChangeCallbackFunc (ABAddressBookRef ntificationaddressbook,CFDic
     for (int i = 0; i < count; i ++ ) {
         ABPeopleModel * people = [[ABPeopleModel alloc] init];
         ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        ABMultiValueRef multiPhones = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        ABMultiValueRef multiEmails = ABRecordCopyValue(person, kABPersonEmailProperty);
         
         if (eABPeopleName == (attributes & eABPeopleName)) {
             if (ABRecordCopyValue(person, kABPersonLastNameProperty) || ABRecordCopyValue(person, kABPersonMiddleNameProperty) || ABRecordCopyValue(person, kABPersonFirstNameProperty)) {
-                [people.name setObject:NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)) forKey:@"lastName"];
-                [people.name setObject:NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonMiddleNameProperty)) forKey:@"middleName"];
-                [people.name setObject:NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty) )forKey:@"firstName"];
+                people.name.lastName = NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty));
+                people.name.middleName = NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonMiddleNameProperty));
+                people.name.firstName = NotNilString((__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty));
             }
         }
         if (eABPeoplePhones == (attributes & eABPeoplePhones)) {
+            ABMultiValueRef multiPhones = ABRecordCopyValue(person, kABPersonPhoneProperty);
             for(CFIndex j = 0; j < ABMultiValueGetCount(multiPhones); j ++) {
                 CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(multiPhones, j);
+                CFStringRef phoneNumberLabelRef = ABMultiValueCopyLabelAtIndex(multiPhones, j);
                 NSString * phoneNumber = NotNilString((__bridge NSString *) phoneNumberRef);
-                [people.phones addObject:phoneNumber];
+                NSString * phoneNumberLabel = NotNilString((__bridge NSString *)phoneNumberLabelRef);
+                ABPhoneModel * phone = [[ABPhoneModel alloc] init];
+                phone.phone = phoneNumber;
+                phone.type = phoneNumberLabel;
+                [people.phones addObject:phone];
             }
         }
         if (eABPeopleEmails == (attributes & eABPeopleEmails)) {
+            ABMultiValueRef multiEmails = ABRecordCopyValue(person, kABPersonEmailProperty);
             for(CFIndex j = 0; j < ABMultiValueGetCount(multiEmails); j ++) {
-                CFStringRef emailRef = ABMultiValueCopyValueAtIndex(multiEmails, j);
-                NSString * email = NotNilString((__bridge NSString *) emailRef);
+                NSString * email = NotNilString((__bridge NSString *) ABMultiValueCopyValueAtIndex(multiEmails, j));
+                NSString * emailLabel = NotNilString((__bridge NSString *)ABMultiValueCopyLabelAtIndex(multiEmails, j));
+                ABEmailModel * emailModel = [[ABEmailModel alloc] init];
+                emailModel.email = email;
+                emailModel.type = emailLabel;
                 [people.emails addObject:email];
             }
         }
         if (eABPeopleCompany == (attributes & eABPeopleCompany)) {
-            NSString * company = (__bridge NSString *)ABRecordCopyValue(person, kABPersonOrganizationProperty);
-            people.company = company;
+            people.company = (__bridge NSString *)ABRecordCopyValue(person, kABPersonOrganizationProperty);;
         }
         if (eABPeopleAvatar == (attributes & eABPeopleAvatar)) {
             NSData * imagedata = (__bridge NSData *)ABPersonCopyImageData(person);
             UIImage * avatar = [UIImage imageWithData:imagedata];
             people.avatar = avatar;
         }
+        if (eABPeopleUrl == (attributes & eABPeopleUrl)) {
+            ABMultiValueRef urls = ABRecordCopyValue(person, kABPersonURLProperty);
+            for (int j = 0; j < ABMultiValueGetCount(urls); j ++) {
+                NSString * urlRef = (__bridge NSString *)ABMultiValueCopyValueAtIndex(urls, j);
+                NSString * urlLabel = (__bridge NSString * )ABMultiValueCopyLabelAtIndex(urls, j);
+                ABUrlModel * url = [[ABUrlModel alloc] init];
+                url.url = urlRef;
+                url.type = urlLabel;
+                [people.url addObject:url];
+            }
+        }
+        if (eABPeopleAddress == (attributes & eABPeopleAddress)) {
+            ABMultiValueRef address = ABRecordCopyValue(person, kABPersonAddressProperty);
+            for (int i = 0 ; i < ABMultiValueGetCount(address); i ++) {
+                CFDictionaryRef addressDict = ABMultiValueCopyValueAtIndex(address, i);
+                ABAddressModel * addressModel = [[ABAddressModel alloc] init];
+                addressModel.type = (__bridge NSString *)ABMultiValueCopyLabelAtIndex(address, i);
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressStreetKey)) {
+                    NSString * street = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressStreetKey);
+                    addressModel.street = street;
+                }
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressCityKey)) {
+                    NSString * city = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressCityKey);
+                    addressModel.city = city;
+                }
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressCountryKey)) {
+                    NSString * country = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressCountryKey);
+                    addressModel.country = country;
+                }
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressStateKey)) {
+                    NSString * state = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressStateKey);
+                    addressModel.state = state;
+                }
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressZIPKey)) {
+                    NSString * zipCode = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressZIPKey);
+                    addressModel.zipCode = zipCode;
+                }
+                if (CFDictionaryContainsKey(addressDict, kABPersonAddressCountryCodeKey)) {
+                    NSString * countryCode = (__bridge NSString *)CFDictionaryGetValue(addressDict, kABPersonAddressCountryKey);
+                    addressModel.countryCode = countryCode;
+                }
+                [people.address addObject:addressModel];
+            }
+        }
+        if (eABPeopleBirthday == (attributes & eABPeopleBirthday)) {
+            people.birthday = (__bridge NSDate *)ABRecordCopyValue(person, kABPersonBirthdayProperty);
+        }
         [contactsInfo addObject:people];
     }
-    
+    addressBook = nil;
     return contactsInfo;
-}
-
-+ (NSArray *)getAllPhoneNumbers
-{
-    NSArray * allUsers = [self getAddressBookWithAttributes:eABPeoplePhones];
-    NSMutableArray * allPhones = [[NSMutableArray alloc] initWithCapacity:allUsers.count];
-    for (NSDictionary * user in allUsers) {
-        for (NSString * phone in user[@"Phones"]) {
-            [allPhones addObject:phone];
-        }
-    }
-    return allPhones;
-}
-
-+ (NSArray *)getAllEmails
-{
-    NSArray * allUsers = [self getAddressBookWithAttributes:eABPeopleEmails];
-    NSMutableArray * allEmails = [[NSMutableArray alloc] initWithCapacity:allUsers.count];
-    for (NSDictionary * user in allUsers) {
-        for (NSString * email in user[@"Emails"]) {
-            [allEmails addObject:email];
-        }
-    }
-    return allEmails;
 }
 
 ////////////////////////////////////////////////////////////////

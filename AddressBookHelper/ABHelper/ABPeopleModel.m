@@ -8,17 +8,71 @@
 
 #import "ABPeopleModel.h"
 
-@implementation ABPeopleModel
+@implementation ABSimpleModel
 
-- (id)init
+-(id)init
 {
-    self = [super self];
+    self = [super init];
     if (self) {
-        self.name = [[NSMutableDictionary alloc] init];
-        self.phones = [[NSMutableArray alloc] init];
-        self.emails = [[NSMutableArray alloc] init];
+        self.type = @"";
     }
     return self;
 }
 
 @end
+
+
+@implementation ABNameModel
+
+
+@end
+
+
+@implementation ABPhoneModel
+
+
+@end
+
+
+@implementation ABEmailModel
+
+
+@end
+
+
+@implementation ABUrlModel
+
+
+@end
+
+
+@implementation ABAddressModel
+
+
+@end
+
+
+@implementation ABDateModel
+
+
+@end
+
+
+@implementation ABPeopleModel
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.name = [[ABNameModel alloc] init];
+        self.phones = [[NSMutableArray alloc] init];
+        self.emails = [[NSMutableArray alloc] init];
+        self.url = [[NSMutableArray alloc] init];
+        self.address = [[NSMutableArray alloc] init];
+        self.date = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+@end
+

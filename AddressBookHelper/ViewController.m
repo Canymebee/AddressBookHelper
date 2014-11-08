@@ -25,11 +25,14 @@
 {
     [super viewDidAppear:animated];
     if ([ABReaderHelper requireAccess]) {
-        NSArray * arr = [ABReaderHelper getAddressBookWithAttributes:0b111111];
+        NSArray * arr = [ABReaderHelper getAddressBookWithAttributes:0b111111111];
         for (ABPeopleModel * people in arr) {
-            NSLog(@"name : %@ %@ %@", people.name[@"firstName"], people.name[@"middleName"], people.name[@"lastName"]);
+            if ([people.name.firstName isEqualToString:@"Kate"]) {
+                [self.avatarImageView setImage:people.avatar];
+            }
         }
     }
+    
     
 }
 
